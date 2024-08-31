@@ -7,14 +7,21 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "@/components/CustomButton";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const logo = require("../assets/images/logo.png");
 const cards = require("../assets/images/cards.png");
 
 export default function App() {
+  const { isLoggedIn, isLoading } = useGlobalContext();
+
+  if (!isLoading && isLoggedIn) {
+    return <Redirect href="/home" />;
+  }
+
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView contentContainerStyle={{ height: "100%" }}>

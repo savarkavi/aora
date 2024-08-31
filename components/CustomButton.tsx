@@ -1,15 +1,17 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 
 interface CustomButtonProps {
   containerClasses?: string;
   text: string;
   handlePress: () => void;
+  isLoading?: boolean;
 }
 
 const CustomButton = ({
   containerClasses,
   text,
   handlePress,
+  isLoading,
 }: CustomButtonProps) => {
   return (
     <TouchableOpacity
@@ -17,7 +19,16 @@ const CustomButton = ({
       activeOpacity={0.5}
       onPress={handlePress}
     >
-      <Text className={``}>{text}</Text>
+      {isLoading ? (
+        <ActivityIndicator
+          animating={isLoading}
+          color="#fff"
+          size="small"
+          className="ml-2"
+        />
+      ) : (
+        <Text className={`font-bold`}>{text}</Text>
+      )}
     </TouchableOpacity>
   );
 };
