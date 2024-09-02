@@ -13,9 +13,19 @@ export const config = {
   projectId: "66d14e620013dd766e9f",
   databaseId: "66d157b3002b1465e42a",
   userCollectionId: "66d157fc0014d718efab",
-  videoCOllectionId: "66d15819001b81a1b471",
+  videoCollectionId: "66d15819001b81a1b471",
   storageId: "66d15ca7002ec2230c02",
 };
+
+const {
+  databaseId,
+  endpoint,
+  platform,
+  projectId,
+  storageId,
+  userCollectionId,
+  videoCollectionId,
+} = config;
 
 interface CreateUserParams {
   email: string;
@@ -29,10 +39,7 @@ interface SignInParams {
 }
 
 const client = new Client();
-client
-  .setEndpoint(config.endpoint)
-  .setProject(config.projectId)
-  .setPlatform(config.platform);
+client.setEndpoint(endpoint).setProject(projectId).setPlatform(platform);
 
 const account = new Account(client);
 const avatars = new Avatars(client);
@@ -58,8 +65,8 @@ export const createUser = async ({
     await signIn({ email, password });
 
     const newUser = await databases.createDocument(
-      config.databaseId,
-      config.userCollectionId,
+      databaseId,
+      userCollectionId,
       ID.unique(),
       { accountId: newAccount.$id, email, username, avatar: avatarUrl }
     );
@@ -89,14 +96,37 @@ export const getCurrentUser = async () => {
     if (!currentAccount) throw Error;
 
     const currentUser = await databases.listDocuments(
-      config.databaseId,
-      config.userCollectionId,
+      databaseId,
+      userCollectionId,
       [Query.equal("accountId", currentAccount.$id)]
     );
 
     if (!currentUser) throw Error;
 
     return currentUser.documents[0];
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const getAllPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId);
+    return posts.documents;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const getLatestPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.orderDesc("$createdAt"),
+      Query.limit(7),
+    ]);
+    return posts.documents;
   } catch (error: any) {
     console.log(error);
     throw new Error(error);
