@@ -5,7 +5,7 @@ import { Models } from "react-native-appwrite";
 const menuIcon = require("../assets/icons/menu.png");
 const playIcon = require("../assets/icons/play.png");
 
-const VideoCard = ({ post }: { post: Models.Document }) => {
+const PhotoCard = ({ post }: { post: Models.Document }) => {
   return (
     <View className="mt-4 p-4">
       <View className="flex-row justify-between">
@@ -32,17 +32,12 @@ const VideoCard = ({ post }: { post: Models.Document }) => {
       >
         <Image
           source={{ uri: post.thumbnail }}
-          className="w-full h-60 rounded-lg opacity-60"
+          className="w-full h-60 rounded-lg"
           resizeMode="cover"
-        />
-        <Image
-          source={playIcon}
-          className="w-12 h-12 absolute"
-          resizeMode="contain"
         />
       </TouchableOpacity>
     </View>
   );
 };
 
-export default VideoCard;
+export default PhotoCard;

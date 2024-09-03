@@ -9,11 +9,11 @@ import {
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchInput from "@/components/SearchInput";
-import TrendingVideos from "@/components/TrendingVideos";
+import TrendingPhotos from "@/components/TrendingPhotos";
 import EmptyState from "@/components/EmptyState";
 import useAppwrite from "@/lib/useAppwrite";
 import { getAllPosts, getLatestPosts } from "@/lib/appwrite";
-import VideoCard from "@/components/VideoCard";
+import PhotoCard from "@/components/PhotoCard";
 
 const logo = require("../../assets/images/logo.png");
 
@@ -32,7 +32,7 @@ const Home = () => {
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <VideoCard post={item} />}
+        renderItem={({ item }) => <PhotoCard post={item} />}
         ListHeaderComponent={() => (
           <View className="p-4 mt-4">
             <View className="flex-row justify-between">
@@ -50,9 +50,9 @@ const Home = () => {
                 />
               </View>
             </View>
-            <SearchInput value="" handleChangeText={() => {}} />
-            <Text className="text-white mt-16">Trending Videos</Text>
-            <TrendingVideos />
+            <SearchInput />
+            <Text className="text-white mt-16">Trending Photos</Text>
+            <TrendingPhotos />
           </View>
         )}
         ListEmptyComponent={() => <EmptyState />}

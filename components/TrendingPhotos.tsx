@@ -2,10 +2,10 @@ import { View, Text, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import useAppwrite from "@/lib/useAppwrite";
 import { getLatestPosts } from "@/lib/appwrite";
-import TrendingVideoCard from "./TrendingVideoCard";
+import TrendingPhotoCard from "./TrendingPhotoCard";
 import { Models } from "react-native-appwrite";
 
-const TrendingVideos = () => {
+const TrendingPhotos = () => {
   const { data: posts, isLoading, refetch } = useAppwrite(getLatestPosts);
   const [activeItem, setActiveItem] = useState<any>(null);
 
@@ -16,6 +16,8 @@ const TrendingVideos = () => {
   }, [posts]);
 
   if (!activeItem) return null;
+
+  if (isLoading) return <Text>Loading...</Text>;
 
   const viewableItemsChanged = ({ viewableItems }: { viewableItems: any }) => {
     if (viewableItems.length > 0) {
@@ -28,7 +30,7 @@ const TrendingVideos = () => {
       data={posts}
       keyExtractor={(item) => item.$id}
       renderItem={({ item }) => (
-        <TrendingVideoCard post={item} activeItem={activeItem} />
+        <TrendingPhotoCard post={item} activeItem={activeItem} />
       )}
       horizontal
       onViewableItemsChanged={viewableItemsChanged}
@@ -39,4 +41,4 @@ const TrendingVideos = () => {
   );
 };
 
-export default TrendingVideos;
+export default TrendingPhotos;

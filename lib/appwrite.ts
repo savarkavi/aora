@@ -13,7 +13,7 @@ export const config = {
   projectId: "66d14e620013dd766e9f",
   databaseId: "66d157b3002b1465e42a",
   userCollectionId: "66d157fc0014d718efab",
-  videoCollectionId: "66d15819001b81a1b471",
+  photoCollectionId: "66d15819001b81a1b471",
   storageId: "66d15ca7002ec2230c02",
 };
 
@@ -24,7 +24,7 @@ const {
   projectId,
   storageId,
   userCollectionId,
-  videoCollectionId,
+  photoCollectionId,
 } = config;
 
 interface CreateUserParams {
@@ -112,7 +112,7 @@ export const getCurrentUser = async () => {
 
 export const getAllPosts = async () => {
   try {
-    const posts = await databases.listDocuments(databaseId, videoCollectionId);
+    const posts = await databases.listDocuments(databaseId, photoCollectionId);
     return posts.documents;
   } catch (error: any) {
     console.log(error);
@@ -122,7 +122,7 @@ export const getAllPosts = async () => {
 
 export const getLatestPosts = async () => {
   try {
-    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+    const posts = await databases.listDocuments(databaseId, photoCollectionId, [
       Query.orderDesc("$createdAt"),
       Query.limit(7),
     ]);
