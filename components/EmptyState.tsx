@@ -14,8 +14,8 @@ const EmptyState = () => {
         />
       </View>
       <View className="items-center">
-        <Text className="text-white font-bold text-xl">No videos found</Text>
-        <Text className="text-white">Be the first one to upload a video</Text>
+        <Text className="text-white font-bold text-xl">No Photos found</Text>
+        <Text className="text-white">Be the first one to upload a Photo</Text>
       </View>
     </View>
   );

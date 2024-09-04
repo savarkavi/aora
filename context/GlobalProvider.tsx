@@ -12,6 +12,7 @@ type ContextTypes = {
   isLoggedIn: boolean;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
+  user: Models.Document | null;
   setUser: React.Dispatch<React.SetStateAction<Models.Document | null>>;
 };
 
@@ -53,7 +54,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <GlobalContext.Provider
-      value={{ isLoggedIn, setIsLoggedIn, isLoading, setUser }}
+      value={{ isLoggedIn, setIsLoggedIn, isLoading, setUser, user }}
     >
       {children}
     </GlobalContext.Provider>

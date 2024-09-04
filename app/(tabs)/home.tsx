@@ -5,6 +5,7 @@ import {
   Image,
   StatusBar,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -29,37 +30,45 @@ const Home = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full">
-      <FlatList
-        data={posts}
-        keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <PhotoCard post={item} />}
-        ListHeaderComponent={() => (
-          <View className="p-4 mt-4">
-            <View className="flex-row justify-between">
-              <View>
-                <Text className="text-lg text-white">Welcome back</Text>
-                <Text className="text-3xl font-semibold text-white">
-                  Sushant
-                </Text>
+      {isLoading ? (
+        <View className="h-full justify-center items-center">
+          <ActivityIndicator animating={isLoading} color="#fff" />
+        </View>
+      ) : (
+        <FlatList
+          data={posts}
+          keyExtractor={(item) => item.$id}
+          renderItem={({ item }) => <PhotoCard post={item} />}
+          ListHeaderComponent={() => (
+            <View className="p-4 mt-4">
+              <View className="flex-row justify-between">
+                <View>
+                  <Text className="text-lg text-white">Welcome back</Text>
+                  <Text className="text-3xl font-semibold text-white">
+                    Sushant
+                  </Text>
+                </View>
+                <View>
+                  <Image
+                    source={logo}
+                    className="w-20 h-20"
+                    resizeMode="contain"
+                  />
+                </View>
               </View>
-              <View>
-                <Image
-                  source={logo}
-                  className="w-20 h-20"
-                  resizeMode="contain"
-                />
-              </View>
+              <SearchInput />
+              <Text className="text-white mt-16 font-semibold">
+                Trending Photos
+              </Text>
+              <TrendingPhotos />
             </View>
-            <SearchInput />
-            <Text className="text-white mt-16">Trending Photos</Text>
-            <TrendingPhotos />
-          </View>
-        )}
-        ListEmptyComponent={() => <EmptyState />}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
+          )}
+          ListEmptyComponent={() => <EmptyState />}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
+      )}
       <StatusBar barStyle="light-content" />
     </SafeAreaView>
   );

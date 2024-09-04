@@ -132,3 +132,36 @@ export const getLatestPosts = async () => {
     throw new Error(error);
   }
 };
+
+export const searchPosts = async (query: string) => {
+  try {
+    const posts = await databases.listDocuments(databaseId, photoCollectionId, [
+      Query.search("title", query),
+    ]);
+    return posts.documents;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const getUserPosts = async (userId: string) => {
+  try {
+    const posts = await databases.listDocuments(databaseId, photoCollectionId, [
+      Query.equal("user", userId),
+    ]);
+    return posts.documents;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const signOut = async () => {
+  try {
+    await account.deleteSession("current");
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error);
+  }
+};

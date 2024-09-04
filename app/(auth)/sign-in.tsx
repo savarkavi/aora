@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Alert } from "react-native";
+import { View, Text, ScrollView, Image, Alert, StatusBar } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormInput from "@/components/FormInput";
@@ -83,6 +83,7 @@ const SignIn = () => {
           </View>
         </View>
       </ScrollView>
+      <StatusBar barStyle="light-content" />
     </SafeAreaView>
   );
 };
