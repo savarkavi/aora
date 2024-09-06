@@ -1,3 +1,4 @@
+import { DocumentPickerAsset } from "expo-document-picker";
 import {
   Client,
   Account,
@@ -5,6 +6,7 @@ import {
   Avatars,
   Databases,
   Query,
+  Storage,
 } from "react-native-appwrite";
 
 export const config = {
@@ -44,6 +46,7 @@ client.setEndpoint(endpoint).setProject(projectId).setPlatform(platform);
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
+const storage = new Storage(client);
 
 export const createUser = async ({
   email,
@@ -160,6 +163,65 @@ export const getUserPosts = async (userId: string) => {
 export const signOut = async () => {
   try {
     await account.deleteSession("current");
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const uploadFile = async (file: DocumentPickerAsset) => {
+  if (!file) return;
+
+  const { name, uri, lastModified, mimeType, size } = file;
+
+  if (!name || !uri || !lastModified || !mimeType || !size) return;
+
+  try {
+    const uploadedFile = await storage.createFile(storageId, ID.unique(), {
+      type: mimeType,
+      name,
+      size,
+      uri,
+    });
+
+    const fileUrl = storage.getFilePreview(
+      storageId,
+      uploadedFile.$id,
+      2000,
+      2000
+    );
+
+    if (!fileUrl) {
+      throw new Error("Could not get file url");
+    }
+
+    return fileUrl;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const createPost = async (
+  form: { title: string; prompt: string; file: DocumentPickerAsset | null },
+  userId: string
+) => {
+  if (!form.title || !form.prompt || !form.file) return null;
+
+  try {
+    const imageUrl = await uploadFile(form.file);
+
+    const newPost = await databases.createDocument(
+      databaseId,
+      photoCollectionId,
+      ID.unique(),
+      {
+        title: form.title,
+        prompt: form.prompt,
+        thumnail: imageUrl,
+        user: userId,
+      }
+    );
   } catch (error: any) {
     console.log(error);
     throw new Error(error);
