@@ -152,6 +152,7 @@ export const getUserPosts = async (userId: string) => {
   try {
     const posts = await databases.listDocuments(databaseId, photoCollectionId, [
       Query.equal("user", userId),
+      Query.orderDesc("$createdAt"),
     ]);
     return posts.documents;
   } catch (error: any) {
@@ -172,9 +173,11 @@ export const signOut = async () => {
 export const uploadFile = async (file: DocumentPickerAsset) => {
   if (!file) return;
 
-  const { name, uri, lastModified, mimeType, size } = file;
+  const { name, uri, mimeType, size } = file;
 
-  if (!name || !uri || !lastModified || !mimeType || !size) return;
+  if (!name || !uri || !mimeType || !size) return;
+
+  console.log("working");
 
   try {
     const uploadedFile = await storage.createFile(storageId, ID.unique(), {
@@ -184,12 +187,16 @@ export const uploadFile = async (file: DocumentPickerAsset) => {
       uri,
     });
 
+    console.log(uploadedFile);
+
     const fileUrl = storage.getFilePreview(
       storageId,
       uploadedFile.$id,
       2000,
       2000
     );
+
+    console.log(fileUrl);
 
     if (!fileUrl) {
       throw new Error("Could not get file url");
@@ -211,6 +218,9 @@ export const createPost = async (
   try {
     const imageUrl = await uploadFile(form.file);
 
+    if (!imageUrl) return;
+    console.log(imageUrl);
+
     const newPost = await databases.createDocument(
       databaseId,
       photoCollectionId,
@@ -218,7 +228,7 @@ export const createPost = async (
       {
         title: form.title,
         prompt: form.prompt,
-        thumnail: imageUrl,
+        thumbnail: imageUrl,
         user: userId,
       }
     );

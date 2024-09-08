@@ -30,6 +30,7 @@ const Create = () => {
     file: null,
     prompt: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useGlobalContext();
 
@@ -49,6 +50,7 @@ const Create = () => {
     if (!formData.title || !formData.prompt || !formData.file) {
       return Alert.alert("Please fill on all the fields");
     }
+    setIsLoading(true);
     try {
       const res = await createPost(formData, user.$id);
       Alert.alert("Success", "Post uploaded successfully");
@@ -57,6 +59,7 @@ const Create = () => {
       throw new Error(error);
     } finally {
       setFormData({ title: "", prompt: "", file: null });
+      setIsLoading(false);
     }
   };
 
@@ -71,7 +74,7 @@ const Create = () => {
             <FormInput
               title="Photo title"
               value={formData.title}
-              handleChangeText={() => {}}
+              handleChangeText={(e) => setFormData({ ...formData, title: e })}
               placeholder="Give your photo a title"
             />
             <View className="space-y-4">
@@ -101,7 +104,7 @@ const Create = () => {
             <FormInput
               title="Photo prompt"
               value={formData.prompt}
-              handleChangeText={() => {}}
+              handleChangeText={(e) => setFormData({ ...formData, prompt: e })}
               placeholder="What prompt did you use to generate the image?"
               styles="mt-6"
             />
@@ -110,6 +113,7 @@ const Create = () => {
             text="Publish"
             handlePress={onSubmit}
             containerClasses="mt-8"
+            isLoading={isLoading}
           />
         </View>
       </ScrollView>

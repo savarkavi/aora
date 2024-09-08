@@ -33,6 +33,7 @@ const TrendingPhotos = () => {
         <TrendingPhotoCard post={item} activeItem={activeItem} />
       )}
       horizontal
+      showsHorizontalScrollIndicator={false}
       onViewableItemsChanged={viewableItemsChanged}
       viewabilityConfig={{ itemVisiblePercentThreshold: 70 }}
       contentOffset={{ x: 170, y: 0 }}
